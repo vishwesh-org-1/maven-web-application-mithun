@@ -1,0 +1,51 @@
+node {
+    
+    def mavenHome = tool name: "3.8.5"
+    
+    stage("git clonning"){
+    
+    git 'https://github.com/vishwesh-org-1/maven-web-application-mithun.git'
+    }    
+    stage("build tool"){
+        
+        sh "$mavenHome/bin/mvn clean compile"
+    }
+    
+    stage("sonarqube sreports"){
+        
+        sh "echo sonarqube generating "
+        
+    }
+    stage("copying"){
+        
+        sshagent(['e013c796-c4c5-44c5-bb2b-675122f10e08']) {
+            
+            sh "scp -o StrictHostkeyChecking=no /opt/git/maven-web-application/target/maven-web-application.war ec2-user@65.2.70.199:/mnt"
+    // some block
+
+            
+            
+        
+    // some block
+}
+        
+        
+        
+    }
+    
+    stage("jacoco"){
+        
+        jacoco deltaBranchCoverage: '80', deltaClassCoverage: '80', deltaComplexityCoverage: '80', deltaInstructionCoverage: '80', deltaLineCoverage: '80', deltaMethodCoverage: '80', maximumBranchCoverage: '80', maximumClassCoverage: '80', maximumComplexityCoverage: '80', maximumInstructionCoverage: '80', maximumLineCoverage: '80', maximumMethodCoverage: '80'
+    }
+    
+    stage("build id "){
+        
+        echo "build id is : $BUILD_ID"
+        echo "build display is : $BUILD_DISPLAY_NAME"
+        echo "build jobname is : $JOB_NAME"
+
+       
+    }
+    
+   
+}
